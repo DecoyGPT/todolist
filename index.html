@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <title>Todo List</title>
+</head>
+
+<body>
+  <div class="container mt-4">
+    <h1 class="text-center mb-4">Todo List</h1>
+    <form id="todo-form">
+      <div class="form-row">
+        <div class="col-9">
+          <input type="text" class="form-control" id="todo-input" placeholder="Enter a task">
+        </div>
+        <div class="col-3">
+          <button type="submit" class="btn btn-primary btn-block">Add Task</button>
+        </div>
+      </div>
+    </form>
+    <ul id="task-list" class="list-group mt-3"></ul>
+  </div>
+
+  <script>
+    // Retrieve tasks from local storage or initialize an empty array
+    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+    // Function to render the task list
+    function renderTasks() {
+      const taskList = document.getElementById('task-list');
+      taskList.innerHTML = '';
+
+      tasks.forEach((task, index) => {
+        const listItem = document.createElement('li');
+        listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+        listItem.innerHTML = `
+          <span>${task}</span>
+          <div>
+            <button class="btn btn-success btn-sm mr-1 complete-task" data-index="${index}">Complete</button>
+            <button class="btn btn-danger btn-sm delete-task" data-index="${index}">Delete</button>
+          </div>
+        `;
+        taskList.appendChild(listItem);
+      });
+
+      // Add event listeners for complete and delete buttons
+      const completeButtons = document.getElementsByClassName('complete-task');
+      for (let button of completeButtons) {
+        button.addEventListener('click', completeTask);
+      }
+
+      const deleteButtons = document.getElementsByClassName('delete-task');
+      for (let button of deleteButtons) {
+        button.addEventListener('click', deleteTask);
+      }
+    }
+
+    // Function to add a new task
+    function addTask(event) {
+      event.preventDefault();
+      const input = document.getElementById('todo-input');
+      const task = input.value.trim();
+
+      if (task !== '') {
+        tasks.push(task);
+        input.value = '';
+        renderTasks();
+        updateLocalStorage();
+      }
+    }
+
+    // Function to complete a task
+    function completeTask(event) {
+      const index = event.target.getAttribute('data-index');
+      tasks.splice(index, 1);
+      renderTasks();
+      updateLocalStorage();
+    }
+
+    // Function to delete a task
+    function deleteTask(event) {
+      const index = event.target.getAttribute('data-index');
+      tasks.splice(index, 1);
+      renderTasks();
+      updateLocalStorage();
+    }
+
+    // Function to update local storage with tasks
+    function updateLocalStorage() {
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    // Add event listener for form submission
+    const form = document.getElementById('todo-form');
+    form.addEventListener('submit', addTask);
+
+    // Initial rendering of tasks
+    renderTasks();
+  </script>
+</body>
+
+</html>
