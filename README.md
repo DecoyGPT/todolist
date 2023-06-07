@@ -18,7 +18,7 @@ Simply open the `index.html` file in a web browser to start using the ToDo List 
 
 ## YouTube Tutorial
 
-Check out the tutorial on YouTube: [Link to Your YouTube Video](https://youtube.com/your-video-link)
+Check out the tutorial on YouTube: [Link to Your YouTube Video](https://www.youtube.com/watch?v=9hthxE2gCIo) 
 
 ## Contributing
 
